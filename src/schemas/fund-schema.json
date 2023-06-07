@@ -1,0 +1,1317 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "buyer": {
+      "type": "object",
+      "properties": {
+        "reason": {
+          "type": "string"
+        },
+        "known_price": {
+          "type": "boolean"
+        },
+        "approximation_price": {
+          "type": "number"
+        }
+      },
+      "required": ["reason", "known_price"],
+      "if": {
+        "properties": {
+          "known_price": {
+            "const": true
+          }
+        }
+      },
+      "then": {
+        "required": ["approximation_price"]
+      }
+    },
+    "financing": {
+      "type": "object",
+      "properties": {
+        "needs_financing": {
+          "type": "boolean"
+        },
+        "source": {
+          "type": "string",
+          "oneOf": [
+            {
+              "const": "PRIVATE",
+              "title": "Solely from {{name}}, directly and/or indirectly"
+            },
+            {
+              "const": "EXTERNAL",
+              "title": "Solely from third party funding"
+            },
+            {
+              "const": "BOTH",
+              "title": "From both {{name}} and third party funding"
+            },
+            {
+              "const": "NOT_CLEAR",
+              "title": "Not clear yet at this stage"
+            }
+          ]
+        }
+      },
+      "if": {
+        "properties": {
+          "needs_financing": {
+            "const": true
+          }
+        }
+      },
+      "then": {
+        "required": ["source"]
+      }
+    },
+    "private_funds": {
+      "type": "object",
+      "properties": {
+        "sources": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "oneOf": [
+              {
+                "const": "source1_bank_account",
+                "title": "Bank account(s) in the name of {{name}}"
+              },
+              {
+                "const": "source2_bank_account",
+                "title": "Bank account(s) NOT in the name of {{name}} but associated with {{name}}"
+              },
+              {
+                "const": "source3_cash",
+                "title": "Cash i.e. physical form of currency, such as banknotes and coins"
+              },
+              {
+                "const": "source4_other",
+                "title": "Other"
+              }
+            ]
+          }
+        },
+        "source1_bank_account_q1": {
+          "type": "string",
+          "pattern": "^[A-Za-z ,.'-]+$"
+        },
+        "source2_bank_account_q1": {
+          "type": "string",
+          "pattern": "^[A-Za-z ,.'-]+$"
+        },
+        "source2_bank_account_q2": {
+          "type": "string",
+          "pattern": "^[A-Za-z ,.'-]+$"
+        },
+        "source3_cash_q1": {
+          "type": "string",
+          "pattern": "^[A-Za-z ,.'-]+$"
+        },
+        "source4_other_q1": {
+          "type": "string",
+          "pattern": "^[A-Za-z ,.'-]+$"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "sources": {
+                "contains": {
+                  "const": "source1_bank_account"
+                }
+              }
+            }
+          },
+          "then": {
+            "required": ["source1_bank_account_q1"]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "sources": {
+                "contains": {
+                  "const": "source2_bank_account"
+                }
+              }
+            }
+          },
+          "then": {
+            "required": ["source2_bank_account_q1", "source2_bank_account_q2"]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "sources": {
+                "contains": {
+                  "const": "source3_cash"
+                }
+              }
+            }
+          },
+          "then": {
+            "required": ["source3_cash_q1"]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "sources": {
+                "contains": {
+                  "const": "source4_other"
+                }
+              }
+            }
+          },
+          "then": {
+            "required": ["source4_other_q1"]
+          }
+        }
+      ]
+    },
+    "method_of_generation": {
+      "type": "object",
+      "properties": {
+        "sources": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "oneOf": [
+              {
+                "const": "wealth1_income",
+                "title": "Income from interest"
+              },
+              {
+                "const": "wealth2_securities",
+                "title": "Securities investment portfolio"
+              },
+              {
+                "const": "wealth3_capital_gains",
+                "title": "Periodic dividends and/or capital gains from significant equity holdings"
+              },
+              {
+                "const": "wealth4_real_estate",
+                "title": "Real estate holdings/income, direct and/or indirect"
+              },
+              {
+                "const": "wealth5_salary",
+                "title": "Pension or salary income"
+              },
+              {
+                "const": "wealth6_inheritance",
+                "title": "Inheritance"
+              },
+              {
+                "const": "wealth7_gifts",
+                "title": "Gifts"
+              },
+              {
+                "const": "wealth8_sale_of_assets",
+                "title": "Sale of assets (shares, real estate etc)"
+              },
+              {
+                "const": "wealth9_loan",
+                "title": "Loan"
+              },
+              {
+                "const": "wealth10_crypto_currency",
+                "title": "Crypto currency trading"
+              },
+              {
+                "const": "wealth11_other",
+                "title": "Other"
+              }
+            ]
+          }
+        },
+        "wealth1_income_q1": {
+          "type": "string",
+          "pattern": "^[A-Za-z ,.'-]+$"
+        },
+        "wealth2_securities_q1": {
+          "type": "string",
+          "pattern": "^[A-Za-z ,.'-]+$"
+        },
+        "wealth3_capital_gains_q1": {
+          "type": "string",
+          "pattern": "^[A-Za-z ,.'-]+$"
+        },
+        "wealth4_real_estate_q1": {
+          "type": "string",
+          "pattern": "^[A-Za-z ,.'-]+$"
+        },
+        "wealth5_salary_q1": {
+          "type": "string",
+          "pattern": "^[A-Za-z ,.'-]+$"
+        },
+        "wealth6_inheritance_q1": {
+          "type": "string",
+          "pattern": "^[A-Za-z ,.'-]+$"
+        },
+        "wealth7_gifts_q1": {
+          "type": "string",
+          "pattern": "^[A-Za-z ,.'-]+$"
+        },
+        "wealth8_sale_of_assets_q1": {
+          "type": "string",
+          "pattern": "^[A-Za-z ,.'-]+$"
+        },
+        "wealth9_loan_q1": {
+          "type": "string",
+          "pattern": "^[A-Za-z ,.'-]+$"
+        },
+        "wealth10_crypto_currency_q1": {
+          "type": "string",
+          "pattern": "^[A-Za-z ,.'-]+$"
+        },
+        "wealth11_other_q1": {
+          "type": "string",
+          "pattern": "^[A-Za-z ,.'-]+$"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "sources": {
+                "contains": {
+                  "const": "source1_bank_account"
+                }
+              }
+            }
+          },
+          "then": {
+            "required": ["source1_bank_account_q1"]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "sources": {
+                "contains": {
+                  "const": "source2_bank_account"
+                }
+              }
+            }
+          },
+          "then": {
+            "required": ["source2_bank_account_q1", "source2_bank_account_q2"]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "sources": {
+                "contains": {
+                  "const": "source3_cash"
+                }
+              }
+            }
+          },
+          "then": {
+            "required": ["source3_cash_q1"]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "sources": {
+                "contains": {
+                  "const": "source4_other"
+                }
+              }
+            }
+          },
+          "then": {
+            "required": ["source4_other_q1"]
+          }
+        }
+      ]
+    },
+    "third_party": {
+      "type": "array",
+      "title": "Third parties",
+      "items": {
+        "type": "object",
+        "properties": {
+          "is_financial_institution": {
+            "type": "string",
+            "oneOf": [
+              {
+                "const": "yes",
+                "title": "Yes, it's a financial institution"
+              },
+              {
+                "const": "no",
+                "title": "No, it's another party"
+              }
+            ]
+          },
+          "condition_type": {
+            "type": "string",
+            "oneOf": [
+              {
+                "const": "natural_person",
+                "title": "Natural person"
+              },
+              {
+                "const": "entity",
+                "title": "Legal Entity"
+              }
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "person_date_of_birth": {
+            "type": "string",
+            "format": "date"
+          },
+          "person_place_of_birth": {
+            "type": "string"
+          },
+          "person_country_of_birth": {
+            "type": "string",
+            "enum": [
+              "Afghanistan",
+              "Albania",
+              "Algeria",
+              "American Samoa",
+              "Andorra",
+              "Angola",
+              "Anguilla",
+              "Antigua & Barbuda",
+              "Argentina",
+              "Armenia",
+              "Aruba",
+              "Australia",
+              "Austria",
+              "Azerbaijan",
+              "Bahamas",
+              "Bahrain",
+              "Bangladesh",
+              "Barbados",
+              "Belarus",
+              "Belgium",
+              "Belize",
+              "Benin",
+              "Bermuda",
+              "Bhutan",
+              "Bolivia",
+              "Bonaire",
+              "Bosnia & Herzegovina",
+              "Botswana",
+              "Brazil",
+              "British Virgin Islands",
+              "Brunei",
+              "Bulgaria",
+              "Burkina Faso",
+              "Burma",
+              "Burundi",
+              "Cambodia",
+              "Cameroon",
+              "Comoros",
+              "Canada",
+              "Cape Verde",
+              "Cayman Islands",
+              "Central African Republic",
+              "Chad",
+              "Chile",
+              "China",
+              "Colombia",
+              "Congo, dem. rep.",
+              "Congo, repub. of the ppl",
+              "Cook Islands",
+              "Costa Rica",
+              "Cote d'Ivoire",
+              "Croatia",
+              "Cuba",
+              "Curacao",
+              "Cyprus",
+              "Czech Republic",
+              "Denmark",
+              "Djibouti",
+              "Dominica",
+              "Dominican Republic",
+              "East Timor",
+              "Ecuador",
+              "Egypt",
+              "El Salvador",
+              "Equatorial Guinea",
+              "Eritrea",
+              "Estonia",
+              "Ethiopia",
+              "Faroe Islands",
+              "Fiji",
+              "Finland",
+              "France",
+              "French Guiana",
+              "French Polynesia",
+              "Gabon",
+              "Gambia",
+              "Gaza Strip",
+              "Georgia",
+              "Germany",
+              "Ghana",
+              "Gibraltar",
+              "Greece",
+              "Greenland",
+              "Grenada",
+              "Guadeloupe",
+              "Guam",
+              "Guatemala",
+              "Guernsey",
+              "Guinea",
+              "Guinea-Bissau",
+              "Guyana",
+              "Haiti",
+              "Honduras",
+              "Hong Kong",
+              "Hungary",
+              "Iceland",
+              "India",
+              "Indonesia",
+              "Iran",
+              "Iraq",
+              "Ireland",
+              "Isle of Man",
+              "Israel",
+              "Italy",
+              "Jamaica",
+              "Japan",
+              "Jersey",
+              "Jordan",
+              "Kazakhstan",
+              "Kenya",
+              "Kiribati",
+              "Korea, North",
+              "Korea, South",
+              "Kuwait",
+              "Kyrgyzstan",
+              "Laos",
+              "Latvia",
+              "Lebanon",
+              "Lesotho",
+              "Liberia",
+              "Libya",
+              "Liechtenstein",
+              "Lithuania",
+              "Luxembourg",
+              "Macao",
+              "Madagascar",
+              "Malawi",
+              "Malaysia",
+              "Maldives",
+              "Mali",
+              "Malta",
+              "Marshall Islands",
+              "Martinique",
+              "Mauritania",
+              "Mauritius",
+              "Mayotte",
+              "Mexico",
+              "Micronesia",
+              "Moldova",
+              "Monaco",
+              "Mongolia",
+              "Montserrat",
+              "Morocco",
+              "Mozambique",
+              "Myanmar",
+              "Namibia",
+              "Nauru",
+              "Nepal",
+              "Netherlands",
+              "New Caledonia",
+              "New Zealand",
+              "Nicaragua",
+              "Niger",
+              "Nigeria",
+              "North Macedonia",
+              "Northern Mariana Islands",
+              "Norway",
+              "Oman",
+              "Pakistan",
+              "Palau",
+              "Panama",
+              "Papua New Guinea",
+              "Paraguay",
+              "Peru",
+              "Philippines",
+              "Poland",
+              "Portugal",
+              "Puerto Rico",
+              "Qatar",
+              "Reunion",
+              "Romania",
+              "Russia",
+              "Rwanda",
+              "Saba",
+              "Saint Helena",
+              "Saint Kitts & Nevis",
+              "Saint Lucia",
+              "Saint-Martin (f)",
+              "Sao Tome and Principe",
+              "St Pierre & Miquelon",
+              " St Eustatius",
+              "Saint Vincent & Grenadines",
+              "Samoa",
+              "San Marino",
+              "Saudi Arabia",
+              "Senegal",
+              "Serbia",
+              "Seychelles",
+              "Sierra Leone",
+              "Singapore",
+              "Sint Maarten (nl)",
+              "Slovakia",
+              "Slovenia",
+              "Solomon Islands",
+              "Somalia",
+              "South Africa",
+              "South Sudan",
+              "Spain",
+              "Sri Lanka",
+              "Sudan",
+              "Suriname",
+              " Swaziland",
+              "Sweden",
+              "Switzerland",
+              "Syria",
+              "Taiwan",
+              "Tajikistan",
+              "Tanzania",
+              "Thailand",
+              "Togo",
+              "Tonga",
+              "Trinidad & Tobago",
+              "Tunisia",
+              "Turkey",
+              "Turkmenistan",
+              "Turks & Caicos Islands",
+              "Tuvalu",
+              "Uganda",
+              "Ukraine",
+              "U.A.E. - Abu Dhabi",
+              "U.A.E. - Ajman",
+              "U.A.E. - Dubai",
+              "U.A.E. - Fujairah",
+              "U.A.E. - Ras Al Khaimah",
+              "U.A.E. - Sharjah",
+              "U.K. - England & Wales",
+              "U.K. - Northern Ireland",
+              "U.K. - Scotland",
+              "U.S.A. - Alabama",
+              "U.S.A. - Alaska",
+              "U.S.A. - Arizona",
+              "U.S.A. - Arkansas",
+              "U.S.A. - California",
+              "U.S.A. - Colorado",
+              "U.S.A. - Connecticut",
+              "U.S.A. - Delaware",
+              "U.S.A. - Columbia",
+              "U.S.A. - Florida",
+              "U.S.A. - Georgia",
+              "U.S.A. - Guam",
+              "U.S.A. - Hawaii",
+              "U.S.A. - Idaho",
+              "U.S.A. - Illinois",
+              "U.S.A. - Indiana",
+              "U.S.A. - Iowa",
+              "U.S.A. - Kansas",
+              "U.S.A. - Kentucky",
+              "U.S.A. - Louisiana",
+              "U.S.A. - Maine",
+              "U.S.A. - Maryland",
+              "U.S.A. - Massachusetts",
+              "U.S.A. - Michigan",
+              "U.S.A. - Minnesota",
+              "U.S.A. - Mississippi",
+              "U.S.A. - Missouri",
+              "U.S.A. - Montana",
+              "U.S.A. - Nebraska",
+              "U.S.A. - Nevada",
+              "U.S.A. - New Hampshire",
+              "U.S.A. - New Jersey",
+              "U.S.A. - New Mexico",
+              "U.S.A. - New York",
+              "U.S.A. - North Carolina",
+              "U.S.A. - North Dakota",
+              "U.S.A. - Ohio",
+              "U.S.A. - Oklahoma",
+              "U.S.A. - Oregon",
+              "U.S.A. - Pennsylvania",
+              "U.S.A. - Puerto Rico",
+              "U.S.A - Rhode Island",
+              "U.S.A. - South Carolina",
+              "U.S.A. - South Dakota",
+              "U.S.A. - Tennessee",
+              "U.S.A - Texas",
+              "U.S.A. - Utah",
+              "U.S.A. - Vermont",
+              "U.S.A. - Virginia",
+              "U.S.A. - Washington",
+              "U.S.A. - West Virginia",
+              "U.S.A. - Wisconsin",
+              "U.S.A. - Wyoming",
+              "Uruguay",
+              "US Virgin Islands",
+              "Uzbekistan",
+              "Vanuatu",
+              "Venezuela",
+              "Vietnam",
+              "Wallis & Futuna",
+              "West Bank",
+              "Western Sahara",
+              "Yemen",
+              "Zambia",
+              "Zimbabwe",
+              "Montenegro",
+              "Kosovo"
+            ]
+          },
+          "person_passport_country": {
+            "type": "string",
+            "enum": [
+              "Afghanistan",
+              "Albania",
+              "Algeria",
+              "American Samoa",
+              "Andorra",
+              "Angola",
+              "Anguilla",
+              "Antigua & Barbuda",
+              "Argentina",
+              "Armenia",
+              "Aruba",
+              "Australia",
+              "Austria",
+              "Azerbaijan",
+              "Bahamas",
+              "Bahrain",
+              "Bangladesh",
+              "Barbados",
+              "Belarus",
+              "Belgium",
+              "Belize",
+              "Benin",
+              "Bermuda",
+              "Bhutan",
+              "Bolivia",
+              "Bonaire",
+              "Bosnia & Herzegovina",
+              "Botswana",
+              "Brazil",
+              "British Virgin Islands",
+              "Brunei",
+              "Bulgaria",
+              "Burkina Faso",
+              "Burma",
+              "Burundi",
+              "Cambodia",
+              "Cameroon",
+              "Comoros",
+              "Canada",
+              "Cape Verde",
+              "Cayman Islands",
+              "Central African Republic",
+              "Chad",
+              "Chile",
+              "China",
+              "Colombia",
+              "Congo, dem. rep.",
+              "Congo, repub. of the ppl",
+              "Cook Islands",
+              "Costa Rica",
+              "Cote d'Ivoire",
+              "Croatia",
+              "Cuba",
+              "Curacao",
+              "Cyprus",
+              "Czech Republic",
+              "Denmark",
+              "Djibouti",
+              "Dominica",
+              "Dominican Republic",
+              "East Timor",
+              "Ecuador",
+              "Egypt",
+              "El Salvador",
+              "Equatorial Guinea",
+              "Eritrea",
+              "Estonia",
+              "Ethiopia",
+              "Faroe Islands",
+              "Fiji",
+              "Finland",
+              "France",
+              "French Guiana",
+              "French Polynesia",
+              "Gabon",
+              "Gambia",
+              "Gaza Strip",
+              "Georgia",
+              "Germany",
+              "Ghana",
+              "Gibraltar",
+              "Greece",
+              "Greenland",
+              "Grenada",
+              "Guadeloupe",
+              "Guam",
+              "Guatemala",
+              "Guernsey",
+              "Guinea",
+              "Guinea-Bissau",
+              "Guyana",
+              "Haiti",
+              "Honduras",
+              "Hong Kong",
+              "Hungary",
+              "Iceland",
+              "India",
+              "Indonesia",
+              "Iran",
+              "Iraq",
+              "Ireland",
+              "Isle of Man",
+              "Israel",
+              "Italy",
+              "Jamaica",
+              "Japan",
+              "Jersey",
+              "Jordan",
+              "Kazakhstan",
+              "Kenya",
+              "Kiribati",
+              "Korea, North",
+              "Korea, South",
+              "Kuwait",
+              "Kyrgyzstan",
+              "Laos",
+              "Latvia",
+              "Lebanon",
+              "Lesotho",
+              "Liberia",
+              "Libya",
+              "Liechtenstein",
+              "Lithuania",
+              "Luxembourg",
+              "Macao",
+              "Madagascar",
+              "Malawi",
+              "Malaysia",
+              "Maldives",
+              "Mali",
+              "Malta",
+              "Marshall Islands",
+              "Martinique",
+              "Mauritania",
+              "Mauritius",
+              "Mayotte",
+              "Mexico",
+              "Micronesia",
+              "Moldova",
+              "Monaco",
+              "Mongolia",
+              "Montserrat",
+              "Morocco",
+              "Mozambique",
+              "Myanmar",
+              "Namibia",
+              "Nauru",
+              "Nepal",
+              "Netherlands",
+              "New Caledonia",
+              "New Zealand",
+              "Nicaragua",
+              "Niger",
+              "Nigeria",
+              "North Macedonia",
+              "Northern Mariana Islands",
+              "Norway",
+              "Oman",
+              "Pakistan",
+              "Palau",
+              "Panama",
+              "Papua New Guinea",
+              "Paraguay",
+              "Peru",
+              "Philippines",
+              "Poland",
+              "Portugal",
+              "Puerto Rico",
+              "Qatar",
+              "Reunion",
+              "Romania",
+              "Russia",
+              "Rwanda",
+              "Saba",
+              "Saint Helena",
+              "Saint Kitts & Nevis",
+              "Saint Lucia",
+              "Saint-Martin (f)",
+              "Sao Tome and Principe",
+              "St Pierre & Miquelon",
+              " St Eustatius",
+              "Saint Vincent & Grenadines",
+              "Samoa",
+              "San Marino",
+              "Saudi Arabia",
+              "Senegal",
+              "Serbia",
+              "Seychelles",
+              "Sierra Leone",
+              "Singapore",
+              "Sint Maarten (nl)",
+              "Slovakia",
+              "Slovenia",
+              "Solomon Islands",
+              "Somalia",
+              "South Africa",
+              "South Sudan",
+              "Spain",
+              "Sri Lanka",
+              "Sudan",
+              "Suriname",
+              " Swaziland",
+              "Sweden",
+              "Switzerland",
+              "Syria",
+              "Taiwan",
+              "Tajikistan",
+              "Tanzania",
+              "Thailand",
+              "Togo",
+              "Tonga",
+              "Trinidad & Tobago",
+              "Tunisia",
+              "Turkey",
+              "Turkmenistan",
+              "Turks & Caicos Islands",
+              "Tuvalu",
+              "Uganda",
+              "Ukraine",
+              "U.A.E. - Abu Dhabi",
+              "U.A.E. - Ajman",
+              "U.A.E. - Dubai",
+              "U.A.E. - Fujairah",
+              "U.A.E. - Ras Al Khaimah",
+              "U.A.E. - Sharjah",
+              "U.K. - England & Wales",
+              "U.K. - Northern Ireland",
+              "U.K. - Scotland",
+              "U.S.A. - Alabama",
+              "U.S.A. - Alaska",
+              "U.S.A. - Arizona",
+              "U.S.A. - Arkansas",
+              "U.S.A. - California",
+              "U.S.A. - Colorado",
+              "U.S.A. - Connecticut",
+              "U.S.A. - Delaware",
+              "U.S.A. - Columbia",
+              "U.S.A. - Florida",
+              "U.S.A. - Georgia",
+              "U.S.A. - Guam",
+              "U.S.A. - Hawaii",
+              "U.S.A. - Idaho",
+              "U.S.A. - Illinois",
+              "U.S.A. - Indiana",
+              "U.S.A. - Iowa",
+              "U.S.A. - Kansas",
+              "U.S.A. - Kentucky",
+              "U.S.A. - Louisiana",
+              "U.S.A. - Maine",
+              "U.S.A. - Maryland",
+              "U.S.A. - Massachusetts",
+              "U.S.A. - Michigan",
+              "U.S.A. - Minnesota",
+              "U.S.A. - Mississippi",
+              "U.S.A. - Missouri",
+              "U.S.A. - Montana",
+              "U.S.A. - Nebraska",
+              "U.S.A. - Nevada",
+              "U.S.A. - New Hampshire",
+              "U.S.A. - New Jersey",
+              "U.S.A. - New Mexico",
+              "U.S.A. - New York",
+              "U.S.A. - North Carolina",
+              "U.S.A. - North Dakota",
+              "U.S.A. - Ohio",
+              "U.S.A. - Oklahoma",
+              "U.S.A. - Oregon",
+              "U.S.A. - Pennsylvania",
+              "U.S.A. - Puerto Rico",
+              "U.S.A - Rhode Island",
+              "U.S.A. - South Carolina",
+              "U.S.A. - South Dakota",
+              "U.S.A. - Tennessee",
+              "U.S.A - Texas",
+              "U.S.A. - Utah",
+              "U.S.A. - Vermont",
+              "U.S.A. - Virginia",
+              "U.S.A. - Washington",
+              "U.S.A. - West Virginia",
+              "U.S.A. - Wisconsin",
+              "U.S.A. - Wyoming",
+              "Uruguay",
+              "US Virgin Islands",
+              "Uzbekistan",
+              "Vanuatu",
+              "Venezuela",
+              "Vietnam",
+              "Wallis & Futuna",
+              "West Bank",
+              "Western Sahara",
+              "Yemen",
+              "Zambia",
+              "Zimbabwe",
+              "Montenegro",
+              "Kosovo"
+            ]
+          },
+          "person_passport_number": {
+            "type": "string"
+          },
+          "person_passport_date_of_expiry": {
+            "type": "string",
+            "format": "date"
+          },
+          "person_gender": {
+            "type": "string",
+            "oneOf": [
+              {
+                "const": "male",
+                "title": "Male"
+              },
+              {
+                "const": "female",
+                "title": "Female"
+              }
+            ]
+          },
+          "person_street_name": {
+            "type": "string"
+          },
+          "person_street_no": {
+            "type": "string"
+          },
+          "person_street_no_addition": {
+            "type": "string"
+          },
+          "person_city": {
+            "type": "string"
+          },
+          "person_postal_code": {
+            "type": "string"
+          },
+          "person_address_country": {
+            "type": "string",
+            "enum": [
+              "Afghanistan",
+              "Albania",
+              "Algeria",
+              "American Samoa",
+              "Andorra",
+              "Angola",
+              "Anguilla",
+              "Antigua & Barbuda",
+              "Argentina",
+              "Armenia",
+              "Aruba",
+              "Australia",
+              "Austria",
+              "Azerbaijan",
+              "Bahamas",
+              "Bahrain",
+              "Bangladesh",
+              "Barbados",
+              "Belarus",
+              "Belgium",
+              "Belize",
+              "Benin",
+              "Bermuda",
+              "Bhutan",
+              "Bolivia",
+              "Bonaire",
+              "Bosnia & Herzegovina",
+              "Botswana",
+              "Brazil",
+              "British Virgin Islands",
+              "Brunei",
+              "Bulgaria",
+              "Burkina Faso",
+              "Burma",
+              "Burundi",
+              "Cambodia",
+              "Cameroon",
+              "Comoros",
+              "Canada",
+              "Cape Verde",
+              "Cayman Islands",
+              "Central African Republic",
+              "Chad",
+              "Chile",
+              "China",
+              "Colombia",
+              "Congo, dem. rep.",
+              "Congo, repub. of the ppl",
+              "Cook Islands",
+              "Costa Rica",
+              "Cote d'Ivoire",
+              "Croatia",
+              "Cuba",
+              "Curacao",
+              "Cyprus",
+              "Czech Republic",
+              "Denmark",
+              "Djibouti",
+              "Dominica",
+              "Dominican Republic",
+              "East Timor",
+              "Ecuador",
+              "Egypt",
+              "El Salvador",
+              "Equatorial Guinea",
+              "Eritrea",
+              "Estonia",
+              "Ethiopia",
+              "Faroe Islands",
+              "Fiji",
+              "Finland",
+              "France",
+              "French Guiana",
+              "French Polynesia",
+              "Gabon",
+              "Gambia",
+              "Gaza Strip",
+              "Georgia",
+              "Germany",
+              "Ghana",
+              "Gibraltar",
+              "Greece",
+              "Greenland",
+              "Grenada",
+              "Guadeloupe",
+              "Guam",
+              "Guatemala",
+              "Guernsey",
+              "Guinea",
+              "Guinea-Bissau",
+              "Guyana",
+              "Haiti",
+              "Honduras",
+              "Hong Kong",
+              "Hungary",
+              "Iceland",
+              "India",
+              "Indonesia",
+              "Iran",
+              "Iraq",
+              "Ireland",
+              "Isle of Man",
+              "Israel",
+              "Italy",
+              "Jamaica",
+              "Japan",
+              "Jersey",
+              "Jordan",
+              "Kazakhstan",
+              "Kenya",
+              "Kiribati",
+              "Korea, North",
+              "Korea, South",
+              "Kuwait",
+              "Kyrgyzstan",
+              "Laos",
+              "Latvia",
+              "Lebanon",
+              "Lesotho",
+              "Liberia",
+              "Libya",
+              "Liechtenstein",
+              "Lithuania",
+              "Luxembourg",
+              "Macao",
+              "Madagascar",
+              "Malawi",
+              "Malaysia",
+              "Maldives",
+              "Mali",
+              "Malta",
+              "Marshall Islands",
+              "Martinique",
+              "Mauritania",
+              "Mauritius",
+              "Mayotte",
+              "Mexico",
+              "Micronesia",
+              "Moldova",
+              "Monaco",
+              "Mongolia",
+              "Montserrat",
+              "Morocco",
+              "Mozambique",
+              "Myanmar",
+              "Namibia",
+              "Nauru",
+              "Nepal",
+              "Netherlands",
+              "New Caledonia",
+              "New Zealand",
+              "Nicaragua",
+              "Niger",
+              "Nigeria",
+              "North Macedonia",
+              "Northern Mariana Islands",
+              "Norway",
+              "Oman",
+              "Pakistan",
+              "Palau",
+              "Panama",
+              "Papua New Guinea",
+              "Paraguay",
+              "Peru",
+              "Philippines",
+              "Poland",
+              "Portugal",
+              "Puerto Rico",
+              "Qatar",
+              "Reunion",
+              "Romania",
+              "Russia",
+              "Rwanda",
+              "Saba",
+              "Saint Helena",
+              "Saint Kitts & Nevis",
+              "Saint Lucia",
+              "Saint-Martin (f)",
+              "Sao Tome and Principe",
+              "St Pierre & Miquelon",
+              " St Eustatius",
+              "Saint Vincent & Grenadines",
+              "Samoa",
+              "San Marino",
+              "Saudi Arabia",
+              "Senegal",
+              "Serbia",
+              "Seychelles",
+              "Sierra Leone",
+              "Singapore",
+              "Sint Maarten (nl)",
+              "Slovakia",
+              "Slovenia",
+              "Solomon Islands",
+              "Somalia",
+              "South Africa",
+              "South Sudan",
+              "Spain",
+              "Sri Lanka",
+              "Sudan",
+              "Suriname",
+              " Swaziland",
+              "Sweden",
+              "Switzerland",
+              "Syria",
+              "Taiwan",
+              "Tajikistan",
+              "Tanzania",
+              "Thailand",
+              "Togo",
+              "Tonga",
+              "Trinidad & Tobago",
+              "Tunisia",
+              "Turkey",
+              "Turkmenistan",
+              "Turks & Caicos Islands",
+              "Tuvalu",
+              "Uganda",
+              "Ukraine",
+              "U.A.E. - Abu Dhabi",
+              "U.A.E. - Ajman",
+              "U.A.E. - Dubai",
+              "U.A.E. - Fujairah",
+              "U.A.E. - Ras Al Khaimah",
+              "U.A.E. - Sharjah",
+              "U.K. - England & Wales",
+              "U.K. - Northern Ireland",
+              "U.K. - Scotland",
+              "U.S.A. - Alabama",
+              "U.S.A. - Alaska",
+              "U.S.A. - Arizona",
+              "U.S.A. - Arkansas",
+              "U.S.A. - California",
+              "U.S.A. - Colorado",
+              "U.S.A. - Connecticut",
+              "U.S.A. - Delaware",
+              "U.S.A. - Columbia",
+              "U.S.A. - Florida",
+              "U.S.A. - Georgia",
+              "U.S.A. - Guam",
+              "U.S.A. - Hawaii",
+              "U.S.A. - Idaho",
+              "U.S.A. - Illinois",
+              "U.S.A. - Indiana",
+              "U.S.A. - Iowa",
+              "U.S.A. - Kansas",
+              "U.S.A. - Kentucky",
+              "U.S.A. - Louisiana",
+              "U.S.A. - Maine",
+              "U.S.A. - Maryland",
+              "U.S.A. - Massachusetts",
+              "U.S.A. - Michigan",
+              "U.S.A. - Minnesota",
+              "U.S.A. - Mississippi",
+              "U.S.A. - Missouri",
+              "U.S.A. - Montana",
+              "U.S.A. - Nebraska",
+              "U.S.A. - Nevada",
+              "U.S.A. - New Hampshire",
+              "U.S.A. - New Jersey",
+              "U.S.A. - New Mexico",
+              "U.S.A. - New York",
+              "U.S.A. - North Carolina",
+              "U.S.A. - North Dakota",
+              "U.S.A. - Ohio",
+              "U.S.A. - Oklahoma",
+              "U.S.A. - Oregon",
+              "U.S.A. - Pennsylvania",
+              "U.S.A. - Puerto Rico",
+              "U.S.A - Rhode Island",
+              "U.S.A. - South Carolina",
+              "U.S.A. - South Dakota",
+              "U.S.A. - Tennessee",
+              "U.S.A - Texas",
+              "U.S.A. - Utah",
+              "U.S.A. - Vermont",
+              "U.S.A. - Virginia",
+              "U.S.A. - Washington",
+              "U.S.A. - West Virginia",
+              "U.S.A. - Wisconsin",
+              "U.S.A. - Wyoming",
+              "Uruguay",
+              "US Virgin Islands",
+              "Uzbekistan",
+              "Vanuatu",
+              "Venezuela",
+              "Vietnam",
+              "Wallis & Futuna",
+              "West Bank",
+              "Western Sahara",
+              "Yemen",
+              "Zambia",
+              "Zimbabwe",
+              "Montenegro",
+              "Kosovo"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "required": ["buyer"]
+}

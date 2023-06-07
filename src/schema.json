@@ -1,32 +1,242 @@
 {
+  "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
   "properties": {
-    "name": {
-      "type": "string",
-      "minLength": 1
+    "buyer": {
+      "type": "object",
+      "properties": {
+        "reason": {
+          "type": "string"
+        },
+        "known_price": {
+          "type": "boolean"
+        },
+        "approximation_price": {
+          "type": "number"
+        }
+      },
+      "required": ["reason", "known_price"],
+      "if": {
+        "properties": {
+          "known_price": {
+            "const": true
+          }
+        }
+      },
+      "then": {
+        "required": ["approximation_price"]
+      }
     },
-    "description": {
-      "title": "Long Description",
-      "type": "string"
+    "financing": {
+      "type": "object",
+      "properties": {
+        "needs_financing": {
+          "type": "boolean"
+        },
+        "source": {
+          "type": "string",
+          "oneOf": [
+            {
+              "const": "PRIVATE",
+              "title": "private funds"
+            },
+            {
+              "const": "EXTERNAL",
+              "title": "external financing"
+            },
+            {
+              "const": "BOTH",
+              "title": "combination of private funds and external financing"
+            }
+          ]
+        }
+      },
+      "if": {
+        "properties": {
+          "needs_financing": {
+            "const": true
+          }
+        }
+      },
+      "then": {
+        "required": ["source"]
+      }
     },
-    "done": {
-      "type": "boolean"
+    "private_funds": {
+      "type": "object",
+      "properties": {
+        "sources": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "oneOf": [
+              {
+                "const": "interest_income",
+                "title": "interest income"
+              },
+              {
+                "const": "financial_products",
+                "title": "investments in financial products"
+              },
+              {
+                "const": "dividends",
+                "title": "dividends"
+              },
+              {
+                "const": "real_estate",
+                "title": "income from real estate interests"
+              },
+              {
+                "const": "labour",
+                "title": "income from labour, benefits or pension"
+              },
+              {
+                "const": "inheritance",
+                "title": "inheritance"
+              },
+              {
+                "const": "donation",
+                "title": "donation"
+              },
+              {
+                "const": "sale_of_activa",
+                "title": "sale of activa such as shares or real estate"
+              },
+              {
+                "const": "crypto",
+                "title": "cryptocurrency trading"
+              },
+              {
+                "const": "other",
+                "title": "Other"
+              }
+            ]
+          }
+        },
+        "inheritance_source": {
+          "type": "string",
+          "pattern": "^[A-Za-z ,.'-]+$"
+        },
+        "donation_source": {
+          "type": "string",
+          "pattern": "^[A-Za-z ,.'-]+$"
+        },
+        "other": {
+          "type": "string",
+          "pattern": "^[A-Za-z ,.'-]+$"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "sources": {
+                "contains": {
+                  "const": "inheritance"
+                }
+              }
+            }
+          },
+          "then": {
+            "required": ["inheritance_source"]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "sources": {
+                "contains": {
+                  "const": "donation"
+                }
+              }
+            }
+          },
+          "then": {
+            "required": ["donation_source"]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "sources": {
+                "contains": {
+                  "const": "other"
+                }
+              }
+            }
+          },
+          "then": {
+            "required": ["other"]
+          }
+        }
+      ]
     },
-    "due_date": {
-      "type": "string",
-      "format": "date"
-    },
-    "rating": {
-      "type": "integer",
-      "maximum": 5
-    },
-    "recurrence": {
-      "type": "string",
-      "enum": ["Never", "Daily", "Weekly", "Monthly"]
-    },
-    "recurrence_interval": {
-      "type": "integer"
+    "external_financing": {
+      "type": "object",
+      "properties": {
+        "regulated": {
+          "type": "string",
+          "oneOf": [
+            {
+              "const": "regulated",
+              "title": "Regulated"
+            },
+            {
+              "const": "non_regulated",
+              "title": "Not regulated"
+            },
+            {
+              "const": "loan",
+              "title": "Private person"
+            }
+          ]
+        },
+        "regulated_institution_name": {
+          "type": "string",
+          "pattern": "^[0-9A-Za-z ,.'-]+$"
+        },
+        "non_regulated_funding_provider_name": {
+          "type": "string",
+          "pattern": "^[0-9A-Za-z ,.'-]+$"
+        },
+        "non_regulated_funding_provider_address": {
+          "type": "string",
+          "pattern": "^[0-9A-Za-z ,.'-]+$"
+        },
+        "loan_financing": {
+          "type": "string",
+          "pattern": "^[0-9A-Za-z ,.'-]+$"
+        }
+      },
+      "if": {
+        "properties": {
+          "regulated": {
+            "const": "regulated"
+          }
+        }
+      },
+      "else": {
+        "if": {
+          "properties": {
+            "regulated": {
+              "const": "non_regulated"
+            }
+          }
+        },
+        "else": {
+          "required": ["loan_financing"]
+        },
+        "then": {
+          "required": [
+            "non_regulated_funding_provider_name",
+            "non_regulated_funding_provider_address"
+          ]
+        }
+      },
+      "then": {
+        "required": ["regulated_institution_name"]
+      }
     }
   },
-  "required": ["name", "due_date"]
+  "required": ["buyer"]
 }

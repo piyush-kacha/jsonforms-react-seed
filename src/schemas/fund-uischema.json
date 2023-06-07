@@ -1,0 +1,751 @@
+{
+  "type": "Categorization",
+  "elements": [
+    {
+      "type": "Category",
+      "label": "Questions buyer",
+      "elements": [
+        {
+          "type": "Control",
+          "scope": "#/properties/buyer/properties/reason",
+          "label": "Can you briefly indicate the reason for buying the property?",
+          "options": {
+            "isText": true
+          }
+        },
+        {
+          "type": "Control",
+          "scope": "#/properties/buyer/properties/known_price",
+          "options": {
+            "isYesNo": true,
+            "question": "Can you indicate the approximate purchase price of the property?"
+          }
+        },
+        {
+          "type": "Control",
+          "scope": "#/properties/buyer/properties/approximation_price",
+          "label": "What would be the approximate purchase price?",
+          "options": {
+            "isPrice": true
+          },
+          "rule": {
+            "effect": "SHOW",
+            "condition": {
+              "scope": "#/properties/buyer/properties/known_price",
+              "schema": {
+                "const": true
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "Category",
+      "label": "Funding required?",
+      "elements": [
+        {
+          "type": "Control",
+          "scope": "#/properties/financing/properties/needs_financing",
+          "options": {
+            "isYesNo": true,
+            "question": "Do you need financial resources to perform the transaction?"
+          }
+        },
+        {
+          "type": "Control",
+          "scope": "#/properties/financing/properties/source",
+          "label": "Where are the funds coming from to effect the intended transaction payment?",
+          "options": {
+            "format": "radio"
+          },
+          "rule": {
+            "effect": "SHOW",
+            "condition": {
+              "scope": "#/properties/financing/properties/needs_financing",
+              "schema": {
+                "const": true
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "Category",
+      "label": "Private funds",
+      "elements": [
+        {
+          "type": "Group",
+          "scope": "#/properties/private_funds/properties",
+          "text": "In the case of private funds, could you indicate how these funds were generated?",
+          "elements": [
+            {
+              "type": "Label",
+              "text": "Please further specify the exact source or origin of the funds {{name}} will use to fund the intended transaction"
+            },
+            {
+              "type": "Control",
+              "scope": "#/properties/private_funds/properties/sources",
+              "label": "Choose from (multiple answers possible):",
+              "options": {
+                "isMultiOption": true
+              }
+            },
+            {
+              "type": "Control",
+              "scope": "#/properties/private_funds/properties/source1_bank_account_q1",
+              "label": "Please enter the names of the bank(s) in which the accounts are held by {{name}}:",
+              "options": {
+                "isText": true
+              },
+              "rule": {
+                "effect": "SHOW",
+                "condition": {
+                  "scope": "#/properties/private_funds/properties/sources",
+                  "schema": {
+                    "contains": {
+                      "const": "source1_bank_account"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "Control",
+              "scope": "#/properties/private_funds/properties/source2_bank_account_q1",
+              "label": "Regarding the associated party/parties, can you provide the name(s) of the bank(s) from which the funding of the intended transaction by {{name}} will originate?",
+              "options": {
+                "isText": true
+              },
+              "rule": {
+                "effect": "SHOW",
+                "condition": {
+                  "scope": "#/properties/private_funds/properties/sources",
+                  "schema": {
+                    "contains": {
+                      "const": "source2_bank_account"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "Control",
+              "scope": "#/properties/private_funds/properties/source2_bank_account_q2",
+              "label": "Also please explain which party or parties hold these accounts, AND how these parties are associated with {{name}}",
+              "options": {
+                "isText": true
+              },
+              "rule": {
+                "effect": "SHOW",
+                "condition": {
+                  "scope": "#/properties/private_funds/properties/sources",
+                  "schema": {
+                    "contains": {
+                      "const": "source2_bank_account"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "Control",
+              "scope": "#/properties/private_funds/properties/source3_cash_q1",
+              "label": "Regarding the cash from which the payment of the intended transaction by Ivanka Trump wil originate, can you provide a thorough explanation what activities were undertaken to generate this cash:",
+              "options": {
+                "isText": true
+              },
+              "rule": {
+                "effect": "SHOW",
+                "condition": {
+                  "scope": "#/properties/private_funds/properties/sources",
+                  "schema": {
+                    "contains": {
+                      "const": "source3_cash"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "Control",
+              "scope": "#/properties/private_funds/properties/source4_other_q1",
+              "label": "Regarding the 'other' source of funding, can you please provide a thorough explanation as to what this entails?",
+              "options": {
+                "isText": true
+              },
+              "rule": {
+                "effect": "SHOW",
+                "condition": {
+                  "scope": "#/properties/private_funds/properties/sources",
+                  "schema": {
+                    "contains": {
+                      "const": "source4_other"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "rule": {
+        "effect": "SHOW",
+        "condition": {
+          "type": "AND",
+          "conditions": [
+            {
+              "scope": "#/properties/financing/properties/needs_financing",
+              "schema": {
+                "const": true
+              }
+            },
+            {
+              "type": "OR",
+              "conditions": [
+                {
+                  "scope": "#/properties/financing/properties/source",
+                  "schema": {
+                    "const": "PRIVATE"
+                  }
+                },
+                {
+                  "scope": "#/properties/financing/properties/source",
+                  "schema": {
+                    "const": "BOTH"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "type": "Category",
+      "label": "Method of creation/generation",
+      "elements": [
+        {
+          "type": "Group",
+          "scope": "#/properties/method_of_generation/properties",
+          "elements": [
+            {
+              "type": "Label",
+              "text": "With regard to the funds on the aforementioned bank account(s), can you please select from the options below which source best indicate method of creation/generation of those funds?"
+            },
+            {
+              "type": "Control",
+              "scope": "#/properties/method_of_generation/properties/sources",
+              "label": "Choose from (multiple answers possible):",
+              "options": {
+                "isMultiOption": true
+              }
+            },
+            {
+              "type": "Control",
+              "scope": "#/properties/method_of_generation/properties/wealth1_income_q1",
+              "label": "With regard to the interest income received by {{name}}, please describe the details of thereof, such as the details of the party paying the interest (full name and address details), the total loan amount, starting date, end date of the loan and the interest rate.",
+              "options": {
+                "isText": true
+              },
+              "rule": {
+                "effect": "SHOW",
+                "condition": {
+                  "scope": "#/properties/method_of_generation/properties/sources",
+                  "schema": {
+                    "contains": {
+                      "const": "wealth1_income"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "Control",
+              "scope": "#/properties/method_of_generation/properties/wealth2_securities_q1",
+              "label": "With regard to the securities investment portfolio of {{name}}, can you please provide a detailed explanation of your various holdings? (Please list the individual holdings and the respective current values thereof)",
+              "options": {
+                "isText": true
+              },
+              "rule": {
+                "effect": "SHOW",
+                "condition": {
+                  "scope": "#/properties/method_of_generation/properties/sources",
+                  "schema": {
+                    "contains": {
+                      "const": "wealth2_securities"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "Control",
+              "scope": "#/properties/method_of_generation/properties/wealth3_capital_gains_q1",
+              "label": "With regard to the periodic dividends and/or capital gains from significant equity holdings of {{name}}, can you please provide a detailed explanation of your various holdings? (Please list the individual equity holdings and business activities of those companies)",
+              "options": {
+                "isText": true
+              },
+              "rule": {
+                "effect": "SHOW",
+                "condition": {
+                  "scope": "#/properties/method_of_generation/properties/sources",
+                  "schema": {
+                    "contains": {
+                      "const": "wealth3_capital_gains"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "Control",
+              "scope": "#/properties/method_of_generation/properties/wealth4_real_estate_q1",
+              "label": "With regard to the real estate held by {{name}} please describe the nature thereof in detail. For example, what type of real estate object, the respective values, how the respected interests therein are held, and what income is derived from it (where applicable)",
+              "options": {
+                "isText": true
+              },
+              "rule": {
+                "effect": "SHOW",
+                "condition": {
+                  "scope": "#/properties/method_of_generation/properties/sources",
+                  "schema": {
+                    "contains": {
+                      "const": "wealth4_real_estate"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "Control",
+              "scope": "#/properties/method_of_generation/properties/wealth5_salary_q1",
+              "label": "With regard to the pension and/or salary income received by {{name}}, please describe the circumstances thereof, such as for example, source of income, name of employer level of income/pension, over which period this was received etc.",
+              "options": {
+                "isText": true
+              },
+              "rule": {
+                "effect": "SHOW",
+                "condition": {
+                  "scope": "#/properties/method_of_generation/properties/sources",
+                  "schema": {
+                    "contains": {
+                      "const": "wealth5_salary"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "Control",
+              "scope": "#/properties/method_of_generation/properties/wealth6_inheritance_q1",
+              "label": "Regarding the inheritance received by {{name}}, Please describe firstly the amount received from the inheritance. Thereafter, describe the circumstances or background regarding the inheritance, such as for example, who passed away and your relationship with this person etc.",
+              "options": {
+                "isText": true
+              },
+              "rule": {
+                "effect": "SHOW",
+                "condition": {
+                  "scope": "#/properties/method_of_generation/properties/sources",
+                  "schema": {
+                    "contains": {
+                      "const": "wealth6_inheritance"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "Control",
+              "scope": "#/properties/method_of_generation/properties/wealth7_gifts_q1",
+              "label": "Regarding the gift received by {{name}}, please describe the circumstances thereof. For example, the background, name of gift provider, when this occurred and why.",
+              "options": {
+                "isText": true
+              },
+              "rule": {
+                "effect": "SHOW",
+                "condition": {
+                  "scope": "#/properties/method_of_generation/properties/sources",
+                  "schema": {
+                    "contains": {
+                      "const": "wealth7_gifts"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "Control",
+              "scope": "#/properties/method_of_generation/properties/wealth8_sale_of_assets_q1",
+              "label": "Regarding the sale of assets held by {{name}}, please describe the asset itself, its value, the circumstances of the sale such as the reason for the sale or background leading up to it, as well as provide the name of the purchaser.",
+              "options": {
+                "isText": true
+              },
+              "rule": {
+                "effect": "SHOW",
+                "condition": {
+                  "scope": "#/properties/method_of_generation/properties/sources",
+                  "schema": {
+                    "contains": {
+                      "const": "wealth8_sale_of_assets"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "Control",
+              "scope": "#/properties/method_of_generation/properties/wealth9_loan_q1",
+              "label": "With regard to the loan received by {{name}}, please describe the details thereof, such as the total loan amount, starting date, end date of the loan, the interest rate. Note that in the next step I will ask you to provide information about the lender.",
+              "options": {
+                "isText": true
+              },
+              "rule": {
+                "effect": "SHOW",
+                "condition": {
+                  "scope": "#/properties/method_of_generation/properties/sources",
+                  "schema": {
+                    "contains": {
+                      "const": "wealth9_loan"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "Control",
+              "scope": "#/properties/method_of_generation/properties/wealth10_crypto_currency_q1",
+              "label": "With regard to the funds stemming from cryptocurrency trading activities by {{name}}, {{client_name}} requires you in detail to explain the following: 1) Provide the names of the particular cryptocurrencies purchased 2) What was the Euro amount each cryptocurrency was purchased for and the date it was purchased. 3) the Euro amount that same cryptocurrency was sold for (thereby showing the increase in value) and the date it was sold. Note that in the following steps I will require you to provide documentation that supports your description below.",
+              "options": {
+                "isText": true
+              },
+              "rule": {
+                "effect": "SHOW",
+                "condition": {
+                  "scope": "#/properties/method_of_generation/properties/sources",
+                  "schema": {
+                    "contains": {
+                      "const": "wealth10_crypto_currency"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "Control",
+              "scope": "#/properties/method_of_generation/properties/wealth11_other_q1",
+              "label": "With regard to the 'Other Source(s)' that contributed to the total net wealth of {{name}}, can you please provide a detailed explanation of this?",
+              "options": {
+                "isText": true
+              },
+              "rule": {
+                "effect": "SHOW",
+                "condition": {
+                  "scope": "#/properties/method_of_generation/properties/sources",
+                  "schema": {
+                    "contains": {
+                      "const": "wealth11_other"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "rule": {
+        "effect": "SHOW",
+        "condition": {
+          "type": "AND",
+          "conditions": [
+            {
+              "scope": "#/properties/financing/properties/needs_financing",
+              "schema": {
+                "const": true
+              }
+            },
+            {
+              "type": "OR",
+              "conditions": [
+                {
+                  "scope": "#/properties/financing/properties/source",
+                  "schema": {
+                    "const": "PRIVATE"
+                  }
+                },
+                {
+                  "scope": "#/properties/financing/properties/source",
+                  "schema": {
+                    "const": "BOTH"
+                  }
+                }
+              ]
+            },
+            {
+              "scope": "#/properties/private_funds/properties/sources",
+              "schema": {
+                "contains": {
+                  "const": "source1_bank_account"
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "type": "Category",
+      "label": "Third Party Funding",
+      "elements": [
+        {
+          "type": "VerticalLayout",
+          "elements": [
+            {
+              "type": "Control",
+              "scope": "#/properties/third_party",
+              "options": {
+                "elementLabelProp": "name",
+                "detail": {
+                  "type": "VerticalLayout",
+                  "elements": [
+                    {
+                      "type": "Control",
+                      "scope": "#/properties/is_financial_institution",
+                      "label": "Please indicate if it is a regulated financial institution",
+                      "options": {
+                        "format": "radio"
+                      }
+                    },
+                    {
+                      "type": "Control",
+                      "label": "Please provide the name of the financial institution AND also explain the nature of the funding. For example, if it is a loan, explain the terms thereof. ",
+                      "scope": "#/properties/name",
+                      "rule": {
+                        "effect": "SHOW",
+                        "condition": {
+                          "scope": "#/properties/is_financial_institution",
+                          "schema": {
+                            "const": "yes"
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "type": "Control",
+                      "scope": "#/properties/condition_type",
+                      "label": "Please indicate if it is a natural person or entity?",
+                      "options": {
+                        "format": "radio"
+                      },
+                      "rule": {
+                        "effect": "SHOW",
+                        "condition": {
+                          "scope": "#/properties/is_financial_institution",
+                          "schema": {
+                            "const": "no"
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "type": "Group",
+                      "label": "Personal Information",
+                      "elements": [
+                        {
+                          "type": "HorizontalLayout",
+                          "elements": [
+                            {
+                              "type": "Control",
+                              "label": "Person name (Given Name  Last Name/Surname) ",
+                              "scope": "#/properties/name"
+                            },
+                            {
+                              "type": "Control",
+                              "label": "Date of Birth",
+                              "scope": "#/properties/person_date_of_birth"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "HorizontalLayout",
+                          "elements": [
+                            {
+                              "type": "Control",
+                              "label": "City/town of birth",
+                              "scope": "#/properties/person_place_of_birth"
+                            },
+                            {
+                              "type": "Control",
+                              "label": "Country/Jurisdiction of birth",
+                              "scope": "#/properties/person_country_of_birth"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "HorizontalLayout",
+                          "elements": [
+                            {
+                              "type": "Control",
+                              "label": "Country/Jurisdiction that issued the passport ",
+                              "scope": "#/properties/person_passport_country"
+                            },
+                            {
+                              "type": "Control",
+                              "label": "Passport/document number",
+                              "scope": "#/properties/person_passport_number"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "HorizontalLayout",
+                          "elements": [
+                            {
+                              "type": "Control",
+                              "label": "Country/Jurisdiction that issued the passport ",
+                              "scope": "#/properties/person_passport_date_of_expiry"
+                            },
+                            {
+                              "type": "Control",
+                              "label": "Gender",
+                              "options": {
+                                "format": "radio"
+                              },
+                              "scope": "#/properties/person_gender"
+                            }
+                          ]
+                        }
+                      ],
+                      "rule": {
+                        "effect": "SHOW",
+                        "condition": {
+                          "type": "AND",
+                          "conditions": [
+                            {
+                              "scope": "#/properties/is_financial_institution",
+                              "schema": {
+                                "const": "no"
+                              }
+                            },
+                            {
+                              "scope": "#/properties/condition_type",
+                              "schema": {
+                                "const": "natural_person"
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "Group",
+                      "label": "Residential Address",
+                      "elements": [
+                        {
+                          "type": "HorizontalLayout",
+                          "elements": [
+                            {
+                              "type": "Control",
+                              "label": "Street",
+                              "scope": "#/properties/person_street_name"
+                            },
+                            {
+                              "type": "Control",
+                              "label": "Nr.",
+                              "scope": "#/properties/person_street_no"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "HorizontalLayout",
+                          "elements": [
+                            {
+                              "type": "Control",
+                              "label": "Street No. Addition (optional)",
+                              "scope": "#/properties/person_street_no_addition"
+                            },
+                            {
+                              "type": "Control",
+                              "label": "Town/City",
+                              "scope": "#/properties/person_city"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "HorizontalLayout",
+                          "elements": [
+                            {
+                              "type": "Control",
+                              "label": "Postal Code",
+                              "scope": "#/properties/person_postal_code"
+                            },
+                            {
+                              "type": "Control",
+                              "label": "Country/jurisdiction",
+                              "scope": "#/properties/person_address_country"
+                            }
+                          ]
+                        }
+                      ],
+                      "rule": {
+                        "effect": "SHOW",
+                        "condition": {
+                          "type": "AND",
+                          "conditions": [
+                            {
+                              "scope": "#/properties/is_financial_institution",
+                              "schema": {
+                                "const": "no"
+                              }
+                            },
+                            {
+                              "scope": "#/properties/condition_type",
+                              "schema": {
+                                "const": "natural_person"
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "rule": {
+        "effect": "SHOW",
+        "condition": {
+          "type": "AND",
+          "conditions": [
+            {
+              "scope": "#/properties/financing/properties/needs_financing",
+              "schema": {
+                "const": true
+              }
+            },
+            {
+              "type": "OR",
+              "conditions": [
+                {
+                  "scope": "#/properties/financing/properties/source",
+                  "schema": {
+                    "const": "EXTERNAL"
+                  }
+                },
+                {
+                  "scope": "#/properties/financing/properties/source",
+                  "schema": {
+                    "const": "BOTH"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

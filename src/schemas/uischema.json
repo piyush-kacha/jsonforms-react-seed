@@ -1,0 +1,76 @@
+{
+  "type": "VerticalLayout",
+  "elements": [
+    {
+      "type": "Group",
+      "label": "Fill in general information",
+      "text": "On the basis of the Money Laundering and Terrorist Financing (Prevention) Act (Wwft), we ask you to fill in this form when performing a financial transaction. It is possible that additional documents or information are requested as a result of this form.",
+      "elements": [
+        {
+          "type": "Control",
+          "scope": "#/properties/first_name",
+          "label": "Firstname",
+          "options": {
+            "isText": true
+          }
+        },
+        {
+          "type": "Control",
+          "scope": "#/properties/last_name",
+          "label": "Lastname",
+          "options": {
+            "isText": true
+          }
+        },
+        {
+          "type": "Control",
+          "scope": "#/properties/birthdate",
+          "label": "Date of birth",
+          "options": {
+            "isDate": true
+          }
+        },
+        {
+          "type": "Control",
+          "scope": "#/properties/birthplace",
+          "label": "Place of birth",
+          "options": {
+            "isText": true
+          }
+        },
+        {
+          "type": "Control",
+          "scope": "#/properties/address",
+          "label": "Address",
+          "options": {
+            "isText": true
+          }
+        },
+        {
+          "type": "Control",
+          "scope": "#/properties/postal_code",
+          "label": "Zipcode",
+          "options": {
+            "isText": true
+          }
+        },
+        {
+          "type": "Control",
+          "scope": "#/properties/residence",
+          "label": "Residence",
+          "options": {
+            "isText": true
+          }
+        },
+        {
+          "type": "Control",
+          "scope": "#/properties/country",
+          "label": "Country",
+          "options": {
+            "isText": true
+          }
+        }
+      ]
+    }
+  ]
+}

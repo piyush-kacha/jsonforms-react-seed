@@ -1,54 +1,311 @@
 {
-  "type": "VerticalLayout",
+  "type": "Categorization",
   "elements": [
     {
-      "type": "Control",
-      "label": "Completed",
-      "scope": "#/properties/done"
-    },
-    {
-      "type": "Control",
-      "scope": "#/properties/name"
-    },
-    {
-      "type": "HorizontalLayout",
+      "type": "Category",
+      "label": "Questions buyer",
       "elements": [
         {
           "type": "Control",
-          "scope": "#/properties/due_date"
+          "scope": "#/properties/buyer/properties/reason",
+          "label": "Can you briefly indicate the reason for buying the property?",
+          "options": {
+            "isText": true
+          }
         },
         {
           "type": "Control",
-          "scope": "#/properties/rating"
-        }
-      ]
-    },
-    {
-      "type": "HorizontalLayout",
-      "elements": [
-        {
-          "type": "Control",
-          "scope": "#/properties/recurrence"
+          "scope": "#/properties/buyer/properties/known_price",
+          "options": {
+            "isYesNo": true,
+            "question": "Can you indicate the approximate purchase price of the property?"
+          }
         },
         {
           "type": "Control",
-          "scope": "#/properties/recurrence_interval",
+          "scope": "#/properties/buyer/properties/approximation_price",
+          "label": "What would be the approximate purchase price?",
+          "options": {
+            "isPrice": true
+          },
           "rule": {
-            "effect": "HIDE",
+            "effect": "SHOW",
             "condition": {
-              "type": "LEAF",
-              "scope": "#/properties/recurrence",
-              "expectedValue": "Never"
+              "scope": "#/properties/buyer/properties/known_price",
+              "schema": {
+                "const": true
+              }
             }
           }
         }
       ]
     },
     {
-      "type": "Control",
-      "scope": "#/properties/description",
-      "options": {
-        "multi": true
+      "type": "Category",
+      "label": "Funding required?",
+      "elements": [
+        {
+          "type": "Control",
+          "scope": "#/properties/financing/properties/needs_financing",
+          "options": {
+            "isYesNo": true,
+            "question": "Do you need financial resources to perform the transaction?"
+          }
+        },
+        {
+          "type": "Control",
+          "scope": "#/properties/financing/properties/source",
+          "label": "Where do the financial resources come from that will be used to perform the transaction?",
+          "options": {
+            "format": "radio"
+          },
+          "rule": {
+            "effect": "SHOW",
+            "condition": {
+              "scope": "#/properties/financing/properties/needs_financing",
+              "schema": {
+                "const": true
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "Category",
+      "label": "Private funds",
+      "elements": [
+        {
+          "type": "Group",
+          "scope": "#/properties/private_funds/properties",
+          "text": "In the case of private funds, could you indicate how these funds were generated?",
+          "elements": [
+            {
+              "type": "Control",
+              "scope": "#/properties/private_funds/properties/sources",
+              "label": "Choose from (multiple answers possible):",
+              "options": {
+                "isMultiOption": true
+              }
+            },
+            {
+              "type": "Control",
+              "scope": "#/properties/private_funds/properties/inheritance_source",
+              "label": "From whom did you inherit? (full name)",
+              "options": {
+                "isText": true
+              },
+              "rule": {
+                "effect": "SHOW",
+                "condition": {
+                  "scope": "#/properties/private_funds/properties/sources",
+                  "schema": {
+                    "contains": {
+                      "const": "inheritance"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "Control",
+              "scope": "#/properties/private_funds/properties/donation_source",
+              "label": "From whom did you get a donation? (full name)",
+              "options": {
+                "isText": true
+              },
+              "rule": {
+                "effect": "SHOW",
+                "condition": {
+                  "scope": "#/properties/private_funds/properties/sources",
+                  "schema": {
+                    "contains": {
+                      "const": "donation"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "Control",
+              "scope": "#/properties/private_funds/properties/other",
+              "label": "Main source(s)",
+              "options": {
+                "isText": true
+              },
+              "rule": {
+                "effect": "SHOW",
+                "condition": {
+                  "scope": "#/properties/private_funds/properties/sources",
+                  "schema": {
+                    "contains": {
+                      "const": "other"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "rule": {
+        "effect": "SHOW",
+        "condition": {
+          "type": "AND",
+          "conditions": [
+            {
+              "scope": "#/properties/financing/properties/needs_financing",
+              "schema": {
+                "const": true
+              }
+            },
+            {
+              "type": "OR",
+              "conditions": [
+                {
+                  "scope": "#/properties/financing/properties/source",
+                  "schema": {
+                    "const": "PRIVATE"
+                  }
+                },
+                {
+                  "scope": "#/properties/financing/properties/source",
+                  "schema": {
+                    "const": "BOTH"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "type": "Category",
+      "label": "External financing",
+      "elements": [
+        {
+          "type": "Control",
+          "scope": "#/properties/external_financing/properties/regulated",
+          "label": "With regard to the external financing, can you confirm whether this is from a regulated financial institution such as a bank or insurer?",
+          "options": {
+            "format": "radio"
+          }
+        },
+        {
+          "type": "Control",
+          "scope": "#/properties/external_financing/properties/regulated_institution_name",
+          "label": "Could you provide the name of the regulated financial institution if known?",
+          "options": {
+            "isText": true
+          },
+          "rule": {
+            "effect": "SHOW",
+            "condition": {
+              "scope": "#/properties/external_financing/properties/regulated",
+              "schema": {
+                "const": "regulated"
+              }
+            }
+          }
+        },
+        {
+          "type": "Group",
+          "label": "In the case of private funds, could you indicate how these funds were generated?",
+          "elements": [
+            {
+              "type": "Control",
+              "scope": "#/properties/external_financing/properties/non_regulated_funding_provider_name",
+              "label": "Name:",
+              "options": {
+                "isText": true
+              },
+              "rule": {
+                "effect": "SHOW",
+                "condition": {
+                  "scope": "#/properties/external_financing/properties/regulated",
+                  "schema": {
+                    "const": "non_regulated"
+                  }
+                }
+              }
+            },
+            {
+              "type": "Control",
+              "scope": "#/properties/external_financing/properties/non_regulated_funding_provider_address",
+              "label": "Address",
+              "options": {
+                "isText": true
+              },
+              "rule": {
+                "effect": "SHOW",
+                "condition": {
+                  "scope": "#/properties/external_financing/properties/regulated",
+                  "schema": {
+                    "const": "non_regulated"
+                  }
+                }
+              }
+            }
+          ],
+          "rule": {
+            "effect": "SHOW",
+            "condition": {
+              "scope": "#/properties/external_financing/properties/regulated",
+              "schema": {
+                "const": "non_regulated"
+              }
+            }
+          }
+        },
+        {
+          "type": "Control",
+          "scope": "#/properties/external_financing/properties/loan_financing",
+          "label": "In case of a personal loan, could you provide the name of the person issuing the loan?",
+          "options": {
+            "isText": true
+          },
+          "rule": {
+            "effect": "SHOW",
+            "condition": {
+              "scope": "#/properties/external_financing/properties/regulated",
+              "schema": {
+                "const": "loan"
+              }
+            }
+          }
+        }
+      ],
+      "rule": {
+        "effect": "SHOW",
+        "condition": {
+          "type": "AND",
+          "conditions": [
+            {
+              "scope": "#/properties/financing/properties/needs_financing",
+              "schema": {
+                "const": true
+              }
+            },
+            {
+              "type": "OR",
+              "conditions": [
+                {
+                  "scope": "#/properties/financing/properties/source",
+                  "schema": {
+                    "const": "EXTERNAL"
+                  }
+                },
+                {
+                  "scope": "#/properties/financing/properties/source",
+                  "schema": {
+                    "const": "BOTH"
+                  }
+                }
+              ]
+            }
+          ]
+        }
       }
     }
   ]

@@ -7,6 +7,10 @@ import logo from './logo.svg';
 import './App.css';
 import schema from './schema.json';
 import uischema from './uischema.json';
+
+import fundSchema from './schemas/fund-schema.json';
+import fundUiSchema from './schemas/fund-uischema.json';
+
 import {
   materialCells,
   materialRenderers,
@@ -42,11 +46,9 @@ const useStyles = makeStyles({
 });
 
 const initialData = {
-  name: 'Send email to Adrian',
-  description: 'Confirm if you have passed the subject\nHereby ...',
-  done: true,
-  recurrence: 'Daily',
-  rating: 3,
+  financing: {
+    needs_financing: true,
+  },
 };
 
 const renderers = [
@@ -66,15 +68,7 @@ const App = () => {
 
   return (
     <Fragment>
-      <div className='App'>
-        <header className='App-header'>
-          <img src={logo} className='App-logo' alt='logo' />
-          <h1 className='App-title'>Welcome to JSON Forms with React</h1>
-          <p className='App-intro'>More Forms. Less Code.</p>
-        </header>
-      </div>
-
-      <Grid
+      {/* <Grid
         container
         justifyContent={'center'}
         spacing={1}
@@ -96,7 +90,7 @@ const App = () => {
             Clear data
           </Button>
         </Grid>
-        <Grid item sm={6}>
+        <Grid item sm={8}>
           <Typography variant={'h4'} className={classes.title}>
             Rendered form
           </Typography>
@@ -109,6 +103,45 @@ const App = () => {
               cells={materialCells}
               onChange={({ errors, data }) => setData(data)}
             />
+          </div>
+        </Grid>
+      </Grid> */}
+
+      <Grid
+        container
+        justifyContent={'center'}
+        spacing={1}
+        className={classes.container}
+      >
+        <Grid item sm={8}>
+          <Typography variant={'h4'} className={classes.title}>
+            Rendered form
+          </Typography>
+          <div className={classes.demoform}>
+            <JsonForms
+              schema={fundSchema}
+              uischema={fundUiSchema}
+              data={data}
+              renderers={renderers}
+              cells={materialCells}
+              onChange={({ errors, data }) => setData(data)}
+            />
+          </div>
+        </Grid>
+        <Grid item sm={6}>
+          <Button
+            className={classes.resetButton}
+            onClick={clearData}
+            color='primary'
+            variant='contained'
+          >
+            Clear data
+          </Button>
+          <Typography variant={'h4'} className={classes.title}>
+            Bound data
+          </Typography>
+          <div className={classes.dataContent}>
+            <pre id='boundData'>{stringifiedData}</pre>
           </div>
         </Grid>
       </Grid>

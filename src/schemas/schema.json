@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "properties": {
+    "first_name": {
+      "type": "string",
+      "pattern": "^[A-Za-z ,.'-]+$"
+    },
+    "last_name": {
+      "type": "string",
+      "pattern": "^[A-Za-z ,.'-]+$"
+    },
+    "birthdate": {
+      "type": "string"
+    },
+    "birthplace": {
+      "type": "string"
+    },
+    "address": {
+      "type": "string",
+      "pattern": "^[0-9A-Za-z ,.'-]+$"
+    },
+    "postal_code": {
+      "type": "string"
+    },
+    "residence": {
+      "type": "string",
+      "pattern": "^[0-9A-Za-z ,.'-]+$"
+    },
+    "country": {
+      "type": "string",
+      "pattern": "^[0-9A-Za-z ,.'-]+$"
+    }
+  },
+  "required": [
+    "first_name",
+    "last_name",
+    "birthdate",
+    "birthplace",
+    "address",
+    "postal_code",
+    "residence",
+    "country"
+  ]
+}
