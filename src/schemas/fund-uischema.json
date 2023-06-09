@@ -707,6 +707,122 @@
                           ]
                         }
                       }
+                    },
+                    {
+                      "type": "Group",
+                      "label": "Entity Information",
+                      "elements": [
+                        {
+                          "type": "HorizontalLayout",
+                          "elements": [
+                            {
+                              "type": "Control",
+                              "label": "Legal/statutory name",
+                              "scope": "#/properties/name"
+                            },
+                            {
+                              "type": "Control",
+                              "label": "Legal form ",
+                              "scope": "#/properties/entity_legal_form"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "HorizontalLayout",
+                          "elements": [
+                            {
+                              "type": "Control",
+                              "label": "Entity registration number",
+                              "scope": "#/properties/entity_registration_number"
+                            },
+                            {
+                              "type": "Control",
+                              "label": "Date of incorporation or founding",
+                              "scope": "#/properties/entity_date_incorporation"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "HorizontalLayout",
+                          "elements": [
+                            {
+                              "type": "Control",
+                              "label": "Jurisdiction of incorporation",
+                              "scope": "#/properties/entity_country_of_incorporation"
+                            },
+                            {
+                              "type": "Control",
+                              "label": "Representative authority",
+                              "scope": "#/properties/entity_representation"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "HorizontalLayout",
+                          "elements": [
+                            {
+                              "type": "Control",
+                              "label": "Street",
+                              "scope": "#/properties/entity_street_name"
+                            },
+                            {
+                              "type": "Control",
+                              "label": "Nr.",
+                              "scope": "#/properties/entity_street_no"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "HorizontalLayout",
+                          "elements": [
+                            {
+                              "type": "Control",
+                              "label": "Street No. Addition",
+                              "scope": "#/properties/entity_street_no_addition"
+                            },
+                            {
+                              "type": "Control",
+                              "label": "Town/City",
+                              "scope": "#/properties/entity_city"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "HorizontalLayout",
+                          "elements": [
+                            {
+                              "type": "Control",
+                              "label": "Postal Code",
+                              "scope": "#/properties/entity_postal_code"
+                            },
+                            {
+                              "type": "Control",
+                              "label": "Country/jurisdiction",
+                              "scope": "#/properties/entity_address_country"
+                            }
+                          ]
+                        }
+                      ],
+                      "rule": {
+                        "effect": "SHOW",
+                        "condition": {
+                          "type": "AND",
+                          "conditions": [
+                            {
+                              "scope": "#/properties/is_financial_institution",
+                              "schema": {
+                                "const": "no"
+                              }
+                            },
+                            {
+                              "scope": "#/properties/condition_type",
+                              "schema": {
+                                "const": "entity"
+                              }
+                            }
+                          ]
+                        }
+                      }
                     }
                   ]
                 }
