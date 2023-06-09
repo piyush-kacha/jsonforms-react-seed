@@ -1969,7 +1969,64 @@
               "Kosovo"
             ]
           }
-        }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "is_financial_institution": {
+                  "const": "no"
+                },
+                "condition_type": {
+                  "const": "natural_person"
+                }
+              }
+            },
+            "then": {
+              "required": [
+                "name",
+                "person_date_of_birth",
+                "person_place_of_birth",
+                "person_country_of_birth",
+                "person_passport_country",
+                "person_passport_number",
+                "person_passport_date_of_expiry",
+                "person_gender",
+                "person_street_name",
+                "person_street_no",
+                "person_city",
+                "person_postal_code",
+                "person_address_country"
+              ]
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "is_financial_institution": {
+                  "const": "no"
+                },
+                "condition_type": {
+                  "const": "entity"
+                }
+              }
+            },
+            "then": {
+              "required": [
+                "name",
+                "entity_legal_form",
+                "entity_registration_number",
+                "entity_date_incorporation",
+                "entity_country_of_incorporation",
+                "entity_street_name",
+                "entity_street_no",
+                "entity_city",
+                "entity_postal_code",
+                "entity_address_country"
+              ]
+            }
+          }
+        ]
       }
     }
   },
